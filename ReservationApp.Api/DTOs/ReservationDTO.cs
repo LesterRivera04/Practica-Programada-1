@@ -2,9 +2,9 @@
 {
     public class ReservationDTO
     {
-        public string Patient { get; set; } = string.Empty;
-        public string Doctor { get; set; } = string.Empty;
-        public string Specialty { get; set; } = string.Empty;
-        public DateOnly Date { get; set; }
+        public string Paciente { get; set; } = string.Empty;
+        public string Medico { get; set; } = string.Empty;
+        public string Especialidad { get; set; } = string.Empty;
+        public DateOnly Fecha { get; set; }
     }
 }

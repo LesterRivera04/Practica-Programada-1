@@ -6,7 +6,7 @@ namespace ReservationApp.Api.Controllers
 {
     [ApiController]
     [Route("api/reservations")]
-    public class ReservationController : Controller
+    public class ReservationController : ControllerBase
     {
         private readonly IReservationService _reservationServices;
 

@@ -18,10 +18,10 @@ namespace ReservationApp.Api.Services
 
             return reservations.Select(r => new ReservationDTO
             {
-                Patient = r.Patient,
-                Doctor = r.Doctor,
-                Specialty = r.Specialty,
-                Date = r.Date
+                Paciente = r.Paciente,
+                Medico = r.Medico,
+                Especialidad = r.Especialidad,
+                Fecha = r.Fecha
             }).ToList();
         }
 
@@ -33,22 +33,22 @@ namespace ReservationApp.Api.Services
 
             return new ReservationDTO
             {
-                Patient = reservation.Patient,
-                Doctor = reservation.Doctor,
-                Specialty = reservation.Specialty,
-                Date = reservation.Date
+                Paciente = reservation.Paciente,
+                Medico = reservation.Medico,
+                Especialidad = reservation.Especialidad,
+                Fecha = reservation.Fecha
             };
         }
         public async Task CreateReservationAsync(CreateReservationDTO createReservation)
         {
-            DateValidation(createReservation.Date);
+            DateValidation(createReservation.Fecha);
             var reservation = new Models.Reservation
             {
-                Patient = createReservation.Patient,
-                Doctor = createReservation.Doctor,
-                Specialty = createReservation.Specialty,
-                Date = createReservation.Date,
-                CreatedAt = DateTime.UtcNow
+                Paciente = createReservation.Paciente,
+                Medico = createReservation.Medico,
+                Especialidad = createReservation.Especialidad,
+                Fecha = createReservation.Fecha,
+                FechaCreacion = DateTime.UtcNow
             };
             await _reservationRepository.CreateAsync(reservation);
         }
@@ -59,12 +59,12 @@ namespace ReservationApp.Api.Services
             if (existing == null)
                 return false;
 
-            DateValidation(updateReservation.Date);
+            DateValidation(updateReservation.Fecha);
 
-            existing.Patient = updateReservation.Patient;
-            existing.Doctor = updateReservation.Doctor;
-            existing.Specialty = updateReservation.Specialty;
-            existing.Date = updateReservation.Date;
+            existing.Paciente = updateReservation.Paciente;
+            existing.Medico = updateReservation.Medico;
+            existing.Especialidad = updateReservation.Especialidad;
+            existing.Fecha = updateReservation.Fecha;
 
             return await _reservationRepository.UpdateAsync(existing);
         }
