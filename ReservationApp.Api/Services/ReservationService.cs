@@ -25,6 +25,20 @@ namespace ReservationApp.Api.Services
             }).ToList();
         }
 
+        public async Task<ReservationDTO?> GetByIdAsync(int id)
+        {
+            var reservation = await _reservationRepository.GetByIdAsync(id);
+            if (reservation == null)
+                return null;
+
+            return new ReservationDTO
+            {
+                Patient = reservation.Patient,
+                Doctor = reservation.Doctor,
+                Specialty = reservation.Specialty,
+                Date = reservation.Date
+            };
+        }
         public async Task CreateReservationAsync(CreateReservationDTO createReservation)
         {
             DateValidation(createReservation.Date);
@@ -36,7 +50,28 @@ namespace ReservationApp.Api.Services
                 Date = createReservation.Date,
                 CreatedAt = DateTime.UtcNow
             };
-            await _reservationRepository.CreateReservationAsync(reservation);
+            await _reservationRepository.CreateAsync(reservation);
+        }
+
+        public async Task<bool> UpdateReservationAsync(int id, CreateReservationDTO updateReservation)
+        {
+            var existing = await _reservationRepository.GetByIdAsync(id);
+            if (existing == null)
+                return false;
+
+            DateValidation(updateReservation.Date);
+
+            existing.Patient = updateReservation.Patient;
+            existing.Doctor = updateReservation.Doctor;
+            existing.Specialty = updateReservation.Specialty;
+            existing.Date = updateReservation.Date;
+
+            return await _reservationRepository.UpdateAsync(existing);
+        }
+
+        public async Task<bool> DeleteReservationAsync(int id)
+        {
+            return await _reservationRepository.DeleteAsync(id);
         }
 
         private void DateValidation(DateOnly date)

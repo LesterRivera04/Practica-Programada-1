@@ -1,54 +1,50 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using ReservationApp.Api.Data;
 using ReservationApp.Api.Models;
 
 namespace ReservationApp.Api.Repository
 {
     public class ReservationRepository: IReservationRepository
     {
-        private readonly string _connectionString;
+        private readonly ApplicationDbContext _context;
 
-        public ReservationRepository(IConfiguration configuration)
+        public ReservationRepository(ApplicationDbContext context)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+            _context = context;
         }
 
         public async Task<List<Reservation>> GetReservationsAsync()
-        {
-            var reservations = new List<Reservation>();
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var command = new SqlCommand("SELECT * FROM Reservas", connection);
-                var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    reservations.Add(new Models.Reservation
-                    {
-                        Id = reader.GetInt32(0),
-                        Patient = reader.GetString(1),
-                        Doctor = reader.GetString(2),
-                        Specialty = reader.GetString(3),
-                        Date = DateOnly.FromDateTime(reader.GetDateTime(4)),
-                        CreatedAt = reader.GetDateTime(5)
-                    });
-                }
-            }
-            return reservations;
+        {            
+            return await _context.Reservas.ToListAsync();
         }
 
-        public async Task CreateReservationAsync(Reservation reservation)
+        public async Task<Reservation?> GetByIdAsync(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var command = new SqlCommand("INSERT INTO Reservas (Paciente, Medico, Especialidad, Fecha, FechaCreacion) VALUES (@Patient, @Doctor, @Specialty, @Date, @CreatedAt)", connection);
-                command.Parameters.AddWithValue("@Patient", reservation.Patient);
-                command.Parameters.AddWithValue("@Doctor", reservation.Doctor);
-                command.Parameters.AddWithValue("@Specialty", reservation.Specialty);
-                command.Parameters.AddWithValue("@Date", reservation.Date.ToDateTime(new TimeOnly(0, 0)));
-                command.Parameters.AddWithValue("@CreatedAt", reservation.CreatedAt);
-                await command.ExecuteNonQueryAsync();
-            }
+            return await _context.Reservas.FindAsync(id);
+        }
+
+        public async Task<Reservation> CreateAsync(Reservation reservation)
+        {
+            _context.Reservas.Add(reservation);
+            await _context.SaveChangesAsync();
+            return reservation;
+        }
+
+        public async Task<bool> UpdateAsync(Reservation reservation)
+        {
+            _context.Reservas.Update(reservation);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var reservation = await _context.Reservas.FindAsync(id);
+            if (reservation == null)
+                return false;
+
+            _context.Reservas.Remove(reservation);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
