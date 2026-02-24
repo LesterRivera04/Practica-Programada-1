@@ -5,12 +5,12 @@ namespace ReservationApp.Models
     public class CreateReservationViewModel
     {
         [Required]
-        public string Patient { get; set; } = string.Empty;
+        public string Paciente { get; set; } = string.Empty;
         [Required]
-        public DateOnly Date { get; set; }
+        public DateOnly Fecha { get; set; }
         [Required]
-        public string Doctor { get; set; } = string.Empty;
-        public string Specialty { get; set; } = string.Empty;
+        public string Medico { get; set; } = string.Empty;
+        public string Especialidad { get; set; } = string.Empty;
        
     }
 }

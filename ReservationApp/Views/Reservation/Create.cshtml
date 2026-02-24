@@ -7,23 +7,23 @@
 <form asp-action="Create" method="post">
     <div class="form-group">
         <label>Paciente</label>
-        <input asp-for="Patient" class="form-control" />
-        <span asp-validation-for="Patient" class="text-danger"></span>
+        <input asp-for="Paciente" class="form-control" />
+        <span asp-validation-for="Paciente" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Fecha</label>
-        <input asp-for="Date" type="date" class="form-control" />
+        <input asp-for="Fecha" type="date" class="form-control" />
     </div>
 
     <div class="form-group">
         <label>Médico</label>
-        <input asp-for="Doctor" class="form-control" />
+        <input asp-for="Medico" class="form-control" />
     </div>
 
     <div class="form-group">
         <label>Especialidad</label>
-        <input asp-for="Specialty" class="form-control" />
+        <input asp-for="Especialidad" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success mt-3">Guardar</button>
