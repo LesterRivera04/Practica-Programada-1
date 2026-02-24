@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ReservationApp.Api/ReservationApp.Api.csproj" />
+  <Project Path="ReservationApp/ReservationApp.csproj" />
+</Solution>
