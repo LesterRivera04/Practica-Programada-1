@@ -6,6 +6,7 @@
         public DateOnly Fecha { get; set; }
         public string Medico { get; set; } = string.Empty;
         public string Especialidad { get; set; } = string.Empty;
-        
+        public int Id { get; set; }
+
     }
 }

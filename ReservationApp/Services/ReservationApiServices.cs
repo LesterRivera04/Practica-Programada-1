@@ -30,5 +30,15 @@ namespace ReservationApp.Services
                 throw new Exception($"Error creating reservation: {errorMessage}");
             }
         }
+
+        public async Task DeleteReservationAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"reservations/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error deleting reservation: {errorMessage}");
+            }
+        }
     }
 }

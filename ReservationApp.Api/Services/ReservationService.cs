@@ -4,9 +4,10 @@ using ReservationApp.Api.Repository;
 
 namespace ReservationApp.Api.Services
 {
-    public class ReservationService: IReservationService
+    public class ReservationService : IReservationService
     {
         private readonly IReservationRepository _reservationRepository;
+
         public ReservationService(IReservationRepository reservationRepository)
         {
             _reservationRepository = reservationRepository;
@@ -15,9 +16,9 @@ namespace ReservationApp.Api.Services
         public async Task<List<ReservationDTO>> GetReservationsAsync()
         {
             var reservations = await _reservationRepository.GetReservationsAsync();
-
             return reservations.Select(r => new ReservationDTO
             {
+                Id = r.Id, // <-- nuevo
                 Paciente = r.Paciente,
                 Medico = r.Medico,
                 Especialidad = r.Especialidad,
@@ -33,12 +34,14 @@ namespace ReservationApp.Api.Services
 
             return new ReservationDTO
             {
+                Id = reservation.Id, 
                 Paciente = reservation.Paciente,
                 Medico = reservation.Medico,
                 Especialidad = reservation.Especialidad,
                 Fecha = reservation.Fecha
             };
         }
+
         public async Task CreateReservationAsync(CreateReservationDTO createReservation)
         {
             DateValidation(createReservation.Fecha);

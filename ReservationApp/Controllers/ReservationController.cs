@@ -7,7 +7,7 @@ namespace ReservationApp.Controllers
     public class ReservationController : Controller
     {
         private readonly ReservationApiServices _reservationApiServices;
-        
+
         public ReservationController(ReservationApiServices reservationApiServices)
         {
             _reservationApiServices = reservationApiServices;
@@ -25,7 +25,8 @@ namespace ReservationApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateReservationViewModel createReservationViewModel) { 
+        public async Task<IActionResult> Create(CreateReservationViewModel createReservationViewModel)
+        {
             if (ModelState.IsValid)
             {
                 try
@@ -38,9 +39,23 @@ namespace ReservationApp.Controllers
                     ModelState.AddModelError(string.Empty, $"An error occurred while creating the reservation: {ex.Message}");
                     return View(createReservationViewModel);
                 }
-                
             }
             return View(createReservationViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _reservationApiServices.DeleteReservationAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error al eliminar: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }
