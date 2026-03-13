@@ -43,42 +43,6 @@ namespace ReservationApp.Controllers
             return View(createReservationViewModel);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var reservation = await _reservationApiServices.GetReservationByIdAsync(id);
-            if (reservation == null) return NotFound();
-
-            // Mapeamos de ReservationViewModel a CreateReservationViewModel
-            var model = new CreateReservationViewModel
-            {
-                Paciente = reservation.Paciente,
-                Medico = reservation.Medico,
-                Especialidad = reservation.Especialidad,
-                Fecha = reservation.Fecha
-            };
-
-            ViewBag.Id = id; // Lo necesitamos para el post
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(int id, CreateReservationViewModel model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            try
-            {
-                await _reservationApiServices.UpdateReservationAsync(id, model);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return View(model);
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {

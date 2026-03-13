@@ -4,7 +4,7 @@
     {
         Task<List<DTOs.ReservationDTO>> GetReservationsAsync();
         Task<DTOs.ReservationDTO?> GetByIdAsync(int id);
-        Task<DTOs.ReservationDTO> CreateReservationAsync(DTOs.CreateReservationDTO createReservation);
+        Task CreateReservationAsync(DTOs.CreateReservationDTO createReservation);
         Task<bool> UpdateReservationAsync(int id, DTOs.CreateReservationDTO updateReservation);
         Task<bool> DeleteReservationAsync(int id);
     }

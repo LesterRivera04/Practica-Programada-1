@@ -42,10 +42,9 @@ namespace ReservationApp.Api.Services
             };
         }
 
-        public async Task<ReservationDTO> CreateReservationAsync(CreateReservationDTO createReservation)
+        public async Task CreateReservationAsync(CreateReservationDTO createReservation)
         {
             DateValidation(createReservation.Fecha);
-
             var reservation = new Models.Reservation
             {
                 Paciente = createReservation.Paciente,
@@ -54,19 +53,7 @@ namespace ReservationApp.Api.Services
                 Fecha = createReservation.Fecha,
                 FechaCreacion = DateTime.UtcNow
             };
-
-            // Al hacer el CreateAsync, Entity Framework le asigna el Id automáticamente al objeto 'reservation'
-            var createdReservation = await _reservationRepository.CreateAsync(reservation);
-
-            // Devolvemos el DTO con el nuevo ID
-            return new ReservationDTO
-            {
-                Id = createdReservation.Id,
-                Paciente = createdReservation.Paciente,
-                Medico = createdReservation.Medico,
-                Especialidad = createdReservation.Especialidad,
-                Fecha = createdReservation.Fecha
-            };
+            await _reservationRepository.CreateAsync(reservation);
         }
 
         public async Task<bool> UpdateReservationAsync(int id, CreateReservationDTO updateReservation)

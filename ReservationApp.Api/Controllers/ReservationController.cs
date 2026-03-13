@@ -28,45 +28,32 @@ namespace ReservationApp.Api.Controllers
             var reservation = await _reservationServices.GetByIdAsync(id);
             if (reservation == null)
                 return NotFound();
-
             return Ok(reservation);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateReservation(CreateReservationDTO createReservationDTO)
+        public async Task<IActionResult> CreateReservation(CreateReservationDTO createReservationDTOs)
         {
-            // El servicio ahora retorna un ReservationDTO (que contiene el nuevo ID)
-            var newReservation = await _reservationServices.CreateReservationAsync(createReservationDTO);
-
-            // Devuelve 201 Created. 
-            // El primer parámetro es el nombre del método GET para consultar este recurso.
-            // El segundo es el objeto anónimo con el ID para la ruta.
-            // El tercero es el objeto completo creado.
-            return CreatedAtAction(nameof(GetById), new { id = newReservation.Id }, newReservation);
+            await _reservationServices.CreateReservationAsync(createReservationDTOs);
+            return Created("", null); // se supone con esto devuelvo con codigo 201, pero no se como devolver el id del nuevo recurso creado 
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateReservation(int id, CreateReservationDTO updateReservationDTO)
+        public async Task<IActionResult> UpdateReservation(int id, CreateReservationDTO updateReservationDTOs)
         {
-            // Validamos que el registro exista y lo actualizamos
-            var updated = await _reservationServices.UpdateReservationAsync(id, updateReservationDTO);
-
+            var updated = await _reservationServices.UpdateReservationAsync(id, updateReservationDTOs);
             if (!updated)
                 return NotFound();
-
-            // 204 No Content: La operación fue exitosa pero no hay contenido que devolver
-            return NoContent();
+            return NoContent(); // estu un codigo 204 standar REST
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id)
         {
             var deleted = await _reservationServices.DeleteReservationAsync(id);
-
             if (!deleted)
                 return NotFound();
-
-            return NoContent();
+            return NoContent(); // estu un codigo 204 standar REST
         }
     }
 }
