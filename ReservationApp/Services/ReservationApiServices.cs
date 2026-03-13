@@ -40,5 +40,27 @@ namespace ReservationApp.Services
                 throw new Exception($"Error deleting reservation: {errorMessage}");
             }
         }
+
+        // Obtener una sola reserva para llenar el formulario de edición
+        public async Task<ReservationViewModel?> GetReservationByIdAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"reservations/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<ReservationViewModel>();
+            }
+            return null;
+        }
+
+        // Enviar el PUT a la API
+        public async Task UpdateReservationAsync(int id, CreateReservationViewModel updateModel)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"reservations/{id}", updateModel);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error al actualizar en la API: {error}");
+            }
+        }
     }
 }
